@@ -1,26 +1,26 @@
 package com.company;
 
-//import org.apache.activemq.ActiveMQConnection;
-        import org.apache.activemq.ActiveMQConnectionFactory;
-        import javax.jms.Connection;
-        import javax.jms.DeliveryMode;
-        import javax.jms.Destination;
-        import javax.jms.ExceptionListener;
-        import javax.jms.JMSException;
-        import javax.jms.Message;
-        import javax.jms.MessageConsumer;
-        import javax.jms.MessageProducer;
-        import javax.jms.Session;
-        import javax.jms.TextMessage;
+import org.apache.activemq.ActiveMQConnectionFactory;
+import javax.jms.Connection;
+import javax.jms.DeliveryMode;
+import javax.jms.Destination;
+import javax.jms.ExceptionListener;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import static java.lang.Thread.*;
 
 
-public class ActiveMQClient {
+public class MQConnectorTopic {
     public static int fails = 0;
     public static String MSG="";
     public static String TOPIC = "hive.guest.process.monitor";
 
     // Create a ConnectionFactory
-    public static org.apache.activemq.ActiveMQConnectionFactory connectionFactory = new org.apache.activemq.ActiveMQConnectionFactory("system","manager",GLOBALS.AMQ2);
+    public static ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("system","manager",GLOBALS.AMQ2);
 
     public static void createRecord(String msg, String Topic) throws Exception {
         MSG = msg.toString();
@@ -29,25 +29,23 @@ public class ActiveMQClient {
     }
 
     public static void listenTopic(String topic){
-        //while(true){
-        try {
-            TOPIC = topic.toString();
-            thread(new Consumer(), false);
-            //readRecord(TOPIC);
-            //Thread.sleep(100);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
+        TOPIC = topic;
+        //while(true) {
+            try {
+            thread(new Consumer(),false);
+            readRecord(TOPIC);
+            sleep(100);
+            } catch (Exception e) {
             e.printStackTrace();
-        }
+            }
         //}
-
     }
 
     public static String readRecord(String TOPIC) throws Exception {
         TOPIC = TOPIC.toString();
         //thread(new Consumer(), false);
         String msg = ConsumerSynchronous();
-        //System.out.println("MSG="+msg);
+        System.out.println("MSG="+msg);
         return msg;
     }
 

@@ -3,8 +3,15 @@ package com.company;
 public class Main {
 
     public static void main(String[] args) {
+        //MsgBus.listenerTopicMsg();
 
-        ActiveMQClient conn = new ActiveMQClient();
+
+        try {
+            JmsClient.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 }
